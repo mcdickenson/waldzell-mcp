@@ -105,12 +105,12 @@ export function createServer(options: {
   // Set default options
   const enableDynamicToolsets = options.enableDynamicToolsets !== false;
   const disabledToolsets = options.disabledToolsets || [];
-  
+
   // Initialize all toolsets
   console.log('[DEBUG] >>> Calling initializeToolsets...');
   initializeToolsets(enableDynamicToolsets);
   console.log('[DEBUG] <<< Finished initializeToolsets.');
-  
+
   // If specific toolsets are disabled, set their state
   if (disabledToolsets.length > 0) {
     for (const toolsetId of disabledToolsets) {
@@ -124,7 +124,7 @@ export function createServer(options: {
       }
     }
   }
-  
+
   // Register all tools from enabled toolsets
   console.log('[DEBUG] >>> Calling registerAllToolsets...');
   registerAllToolsets(server);
@@ -139,7 +139,7 @@ async function main() {
     // Check for command-line arguments
     const args = process.argv.slice(2);
     const options: { enableDynamicToolsets?: boolean; disabledToolsets?: string[] } = {};
-    
+
     // Parse command-line arguments
     for (let i = 0; i < args.length; i++) {
       const arg = args[i];
@@ -175,7 +175,7 @@ Options:
     // Create and start server with parsed options
     const server = createServer(options);
     await server.connect(new StdioServerTransport());
-    
+
     // Log startup information
     console.log('Yelp Fusion MCP Server started successfully');
     console.log(`Dynamic toolsets: ${options.enableDynamicToolsets !== false ? 'Enabled' : 'Disabled'}`);
@@ -186,12 +186,4 @@ Options:
     console.error('Error starting server:', error);
     process.exit(1);
   }
-}
-
-// Run the server if this is the main module
-// This check enables the file to be both imported as a module and run directly
-if (typeof require !== 'undefined' && require.main === module) {
-  main().catch(console.error);
-} else if (import.meta.url.endsWith('/index.js') || import.meta.url.endsWith('/index.ts')) {
-  main().catch(console.error);
 }
